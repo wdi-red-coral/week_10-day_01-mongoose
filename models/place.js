@@ -8,12 +8,16 @@ const placeSchema = new mongoose.Schema({
     },
     
     latitude: {
-        type: String,
-        required: true
+        type: Number,
+        required: true,
+        min: -90,
+        max: 90
     },
     longitude: {
-        type: String,
-        required: true
+        type: Number,
+        required: true,
+        min: -180,
+        max: 180
     },
     country: {
         type: String

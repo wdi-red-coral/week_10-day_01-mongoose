@@ -53,10 +53,15 @@ const update = function (id, field, value) {
   /* Add Code Here */
   Place.findById(id)
   .then(
-    place => place.updateOne({$set: {field: value}})
+    place => {
+      place[field] = value;
+      return place.save()
+    },
+    error => console.error
   )
   .then(done)
 }
+
 
 const destroy = function (id) {
   /* Add Code Here */
