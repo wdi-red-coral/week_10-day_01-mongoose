@@ -7,29 +7,64 @@ mongoose.connect('mongodb://localhost/mongoose-crud', {
 })
 const db = mongoose.connection
 
+const Place = require('../models/places')
+
 const done = function () { // eslint-disable-line no-unused-vars
   db.close()
 }
 
 // CRUD Actions
-const create = function (name, latitude, longitude, country) {
+const create = function (name, latitude, longitude, country, personid) {
   /* Add Code Here */
+  const placeSchema={
+    name:name,
+    latitude:latitude,
+    longitude:longitude,
+    country:country,
+    person:personid
+  }
+  Place.create(placeSchema)
+  .then(place=>console.log(place.toJSON()))
+  .catch(console.error)
+  .then(done)
 }
 
 const index = function () {
   /* Add Code Here */
+  Place.find()
+  .then((place)=>{
+    place.forEach(place => console.log(place.toJSON()))
+  })
+  .catch(console.error)
+  .then(done)
 }
 
 const show = function (id) {
   /* Add Code Here */
+  Place.findById(id)
+  .then(place=>console.log(place.toJSON()))
+  .catch(console.error)
+  .then(done)
 }
 
 const update = function (id, field, value) {
   /* Add Code Here */
+  Place.findById(id)
+  .then(place =>{
+    place[field] = value
+    return place.save()
+  })
+  .then(place => console.log(place.toObject()))
+  .catch(console.error)
+  .then(done)
 }
 
 const destroy = function (id) {
   /* Add Code Here */
+  Place.findById(id)
+  .then(place =>place.remove())
+  .catch(console.error)
+  .then(done)
 }
 
 // UI
@@ -45,8 +80,9 @@ db.once('open', function () {
       const latitude = process.argv[4]
       const longitude = process.argv[5]
       const country = process.argv[6]
+      const personid = process.argv[7]
 
-      create(name, latitude, longitude, country)
+      create(name, latitude, longitude, country, personid)
 
       break
 

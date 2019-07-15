@@ -8,6 +8,7 @@ mongoose.connect('mongodb://localhost/mongoose-crud', {
 const db = mongoose.connection
 
 const Person = require('../models/person.js')
+const Place = require('../models/places')
 
 const done = function () { // eslint-disable-line no-unused-vars
   db.close()
@@ -15,23 +16,65 @@ const done = function () { // eslint-disable-line no-unused-vars
 
 const index = function () {
   /* Add Code Here */
+  Person.find()
+  .then((people)=>{
+    people.forEach(person => console.log(person.toJSON()))
+  })
+  .catch(console.error)
+  .then(done)
 }
 
 const show = function (id) {
   /* Add Code Here */
+  Person.findById(id)
+  
+  .then(person => console.log(person.toJSON()))
+  .catch(console.error)
+  .then(done)
 }
 
 const destroy = function (id) {
   /* Add Code Here */
+  Person.findById(id)
+  .then(person =>person.remove())
+  .catch(console.error)
+  .then(done)
 }
 
 const update = function (id, field, value) {
   /* Add Code Here */
+  Person.findById(id)
+  .then(person =>{
+    person[field] = value
+    return person.save()
+  })
+  .then(person => console.log(person.toObject()))
+  .catch(console.error)
+  .then(done)
 }
 
-const create = function (firstName, lastName, dob, height, weight) {
+const create = function (firstName, lastName, dob, height, weight, placeid) {
   /* Add Code Here */
+  
+  const personParams={
+    name:{
+      firstName:firstName,
+      lastName:lastName
+    },
+    dob:dob,
+    height:height,
+    weight:weight,
+    places:placeid
+  }
+  Person.create(personParams)
+  .then(person=>{
+    console.log(person.toJSON())
+  }) 
+  .catch(console.error)
+  .then(done)
 }
+
+
 
 db.once('open', function () {
   const command = process.argv[2]
@@ -46,8 +89,9 @@ db.once('open', function () {
       const dob = process.argv[5]
       const height = process.argv[6]
       const weight = process.argv[7]
+      const placeid = process.argv[8]
 
-      create(firstName, lastName, dob, height, weight)
+      create(firstName, lastName, dob, height, weight, placeid)
 
       break
 
@@ -70,7 +114,6 @@ db.once('open', function () {
 
     default:
       index()
-
       break
   }
 })
