@@ -18,19 +18,49 @@ const create = function (name, latitude, longitude, country) {
 
 const index = function () {
   /* Add Code Here */
+  Places.find()
+  .then((people) => {
+    places.forEach(place => console.log(place.toJSON()))
+  })
+  .catch(console.error)
+  .then(done) 
 }
+
 
 const show = function (id) {
   /* Add Code Here */
+  Places.findById(id)
+  .then(place => console.log(places.toJSON()))
+  .catch(console.error)
+  .then(done)
 }
+
 
 const update = function (id, field, value) {
   /* Add Code Here */
+  Places.findById(id)
+  .then(place => {
+    place[field] = value
+
+    return places.save()
+  })
+  .then(place=> console.log(places.toJSON()))
+  .catch(console.error)
+  .then(done)
+  
 }
+
+
 
 const destroy = function (id) {
   /* Add Code Here */
-}
+  Places.findById(id)
+  .then(place => places.remove())
+  .catch(console.error)
+  .then(done)
+
+  }
+
 
 // UI
 db.once('open', function () {
