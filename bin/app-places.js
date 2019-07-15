@@ -5,6 +5,7 @@ mongoose.Promise = global.Promise
 mongoose.connect('mongodb://localhost/mongoose-crud', {
   useMongoClient: true
 })
+const Place = require('../models/Place.js')
 const db = mongoose.connection
 
 const done = function () { // eslint-disable-line no-unused-vars
@@ -13,23 +14,52 @@ const done = function () { // eslint-disable-line no-unused-vars
 
 // CRUD Actions
 const create = function (name, latitude, longitude, country) {
-  /* Add Code Here */
+  const PlaceParams = {
+    name: name,
+    latitude: latitude,
+    longitude: longitude,
+    country: country
+
+  }
+  Place.create(PlaceParams)
+  .then(Place => console.log(Place.toJSON()))
+  .catch(console.error)
+  .then(done)
 }
 
 const index = function () {
-  /* Add Code Here */
+  Place.find()
+  .then((country) => {
+    country.forEach(country => console.log(country.toJSON()))
+  })
+  .catch(console.error)
+  .then(done)
 }
 
 const show = function (id) {
-  /* Add Code Here */
+  Place.findById(id)
+  .then(Place => console.log(Place.toJSON()))
+  .catch(console.error)
+  .then(done)
 }
 
 const update = function (id, field, value) {
-  /* Add Code Here */
+  Place.findById(id)
+  .then(Place => {
+    Place[field] = value
+    return Place.save()
+  })
+  .then(Place => console.log(Place.toJSON()))
+  .catch(console.error)
+  .then(done)
 }
 
 const destroy = function (id) {
-  /* Add Code Here */
+  Place.findById(id)
+  .then(place => place.remove())
+  .catch(console.error)
+  .then(done)
+
 }
 
 // UI
@@ -72,3 +102,4 @@ db.once('open', function () {
       break
   }
 })
+module.exports = Place;
