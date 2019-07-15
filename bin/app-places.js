@@ -7,6 +7,7 @@ mongoose.connect('mongodb://localhost/mongoose-crud', {
 })
 const db = mongoose.connection
 
+const Place = require('../models/place.js')
 const done = function () { // eslint-disable-line no-unused-vars
   db.close()
 }
@@ -14,22 +15,62 @@ const done = function () { // eslint-disable-line no-unused-vars
 // CRUD Actions
 const create = function (name, latitude, longitude, country) {
   /* Add Code Here */
+  const placeParams = {
+    name,
+    latitude,
+    longitude,
+    country
+  }
+  Place.create(placeParams)
+  .then(
+    place => console.log(place),
+    error => console.error
+  )
+  .then(done)
 }
 
 const index = function () {
   /* Add Code Here */
+  Place.find()
+  .then(
+    places => places.forEach(place => console.log(place)),
+    error => console.error
+  )
+  .then(done)
 }
 
 const show = function (id) {
   /* Add Code Here */
+  Place.findById(id)
+  .then(
+    place => console.log(place.toJSON()),
+    error => console.error
+  )
+  .then(done)
 }
 
 const update = function (id, field, value) {
   /* Add Code Here */
+  Place.findById(id)
+  .then(
+    place => {
+      place[field] = value;
+      return place.save()
+    },
+    error => console.error
+  )
+  .then(done)
 }
+
 
 const destroy = function (id) {
   /* Add Code Here */
+  Place.findById(id)
+  .then(
+    place => place.remove(),
+    error => console.error
+  )
+  .then(done)
 }
 
 // UI
@@ -72,3 +113,5 @@ db.once('open', function () {
       break
   }
 })
+
+module.exports = Place;

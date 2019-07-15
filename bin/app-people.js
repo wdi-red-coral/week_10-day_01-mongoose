@@ -15,22 +15,69 @@ const done = function () { // eslint-disable-line no-unused-vars
 
 const index = function () {
   /* Add Code Here */
+  Person.find()
+  .then((people)=>{
+    people.forEach(pers => console.log(pers.toJSON()))
+  })
+  .catch(console.erroe)
+  .then(done)
 }
 
 const show = function (id) {
   /* Add Code Here */
+  Person.findById(id)
+.then(person => {
+  return console.log(person.toJSON());
+})
+.catch(console.error)
+.then(done)
+
+
 }
 
 const destroy = function (id) {
   /* Add Code Here */
+  // Person.findById(id).remove() هذا يشتغل كمان
+  Person.findById(Id)
+  .then.remove(stude => stude(Id))
+  // .then(pers => { pers.remove();
+  // })
+  .catch(console.error)
+  .then(done)
 }
 
-const update = function (id, field, value) {
+const update = function (Id, field, value) {
   /* Add Code Here */
+  Person.findById(Id)
+  
+  .then(pers => { pers[field]=value
+  return pers.save()})
+
+  .catch(console.error)
+  .then(done)
+
 }
 
 const create = function (firstName, lastName, dob, height, weight) {
   /* Add Code Here */
+
+  let personParams ={
+    name:{
+      firstName: firstName,
+      lastName: lastName,
+    },
+    dob:dob,
+    height:height,
+    weight:weight,
+  }
+
+
+  Person.create(personParams)
+  
+  .then(pers => console.log(pers))
+  
+  .catch(console.error)
+  .then(done)
 }
 
 db.once('open', function () {
