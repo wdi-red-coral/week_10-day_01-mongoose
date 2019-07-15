@@ -15,22 +15,57 @@ const done = function () { // eslint-disable-line no-unused-vars
 
 const index = function () {
   /* Add Code Here */
+  Person.find()
+  .then((people) => {
+    people.forEach(person => console.log(person.toJSON()))
+  })
+  
+  .catch(console.error)
+  .then(done)
 }
 
 const show = function (id) {
   /* Add Code Here */
+  Person.findById(id)
+  .then(person => console.log(person.toJSON)())
+  .catch(console.error)
+  .then(done)
+
 }
 
 const destroy = function (id) {
+  Person.findById(id)
+  .then(person =>  person.remove())
+  .catch(console.error)
+  .then(done)
+  
   /* Add Code Here */
 }
 
 const update = function (id, field, value) {
+  Person.findById(id)
+  .then(person => console.log(person.toJSON()))
+  .catch(console.error)
+  .then(done)
   /* Add Code Here */
 }
 
 const create = function (firstName, lastName, dob, height, weight) {
   /* Add Code Here */
+  const personParams = {
+    name: {
+      firstName: firstName,
+      lastName: lastName
+    },
+    dob: dob,
+    height: height,
+    weight: weight
+  }
+
+  Person.create(personParams)
+  .then(person => console.log(person.toJSON()))
+  .catch(console.error)
+  .then(done)
 }
 
 db.once('open', function () {
