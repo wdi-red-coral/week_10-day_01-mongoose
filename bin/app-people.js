@@ -11,26 +11,69 @@ const Person = require('../models/person.js')
 
 const done = function () { // eslint-disable-line no-unused-vars
   db.close()
+
 }
 
 const index = function () {
   /* Add Code Here */
+  Person.find()
+  .then ((people)=> {
+    people.forEach(Person =>console.log(Person.toJSON()) )
+  })
+  .catch(console.error)
+  .then(done)
 }
 
 const show = function (id) {
   /* Add Code Here */
+  Person.findById(id)
+  .then(Person => console.log(Person.toJSON()) )
+  .catch(console.error)
+  .then(done)
+
 }
 
 const destroy = function (id) {
   /* Add Code Here */
+ 
+    Person.findById(id)
+    .then(person => person.remove())
+    .catch(console.error)
+    .then(done)
 }
+
 
 const update = function (id, field, value) {
   /* Add Code Here */
+  Person.findById(id)
+  .then(person => {
+    person[field] = value
+
+    return person.save()
+  })
+
+  .then(person => console.log(person.toJSON()))
+  .catch(console.error)
+  .then(done)
+  
 }
 
 const create = function (firstName, lastName, dob, height, weight) {
   /* Add Code Here */
+  const personParams={
+    name:{
+      firstName:firstName,
+      lastName:lastName
+    },
+    dob:dob,
+    height:height,
+    weight:weight
+  }
+  Person.create(personParams)
+  .then(person=>console.log(person.toJSON()))
+  .catch(console.error)
+  .then(done)
+}
 }
 
 db.once('open', function () {
